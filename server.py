@@ -14,6 +14,14 @@ def loadCompetitions():
          return listOfCompetitions
 
 
+def get_club_list(email):
+    return False
+
+
+def get_club_by_email(club_list):
+    return False
+
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
