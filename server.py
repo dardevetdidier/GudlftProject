@@ -26,6 +26,28 @@ def get_club_by_email(club_list):
         return None
 
 
+def get_club_by_name(name):
+    club_list = [c for c in clubs if c['name'] == name]
+    print(club_list)
+    if club_list:
+        return club_list[0]
+    else:
+        return None
+
+
+def get_competition_by_name(name):
+    competition = [c for c in competitions if c['name'] == name]
+    if competition:
+        return competition[0]
+    else:
+        return None
+
+
+def deducts_club_points(club_points, places):
+    club_points = int(club_points) - places
+    return club_points
+
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
@@ -66,6 +88,12 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     places_required = int(request.form['places'])
+
+    if places_required > int(club['points']):
+        flash(f"You cannot book more than {club['points']} points.")
+        return render_template('booking.html', club=club, competition=competition)
+
+    club['points'] = int(club['points']) - places_required
     competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
@@ -77,3 +105,8 @@ def purchasePlaces():
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
