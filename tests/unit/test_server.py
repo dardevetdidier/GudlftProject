@@ -1,4 +1,5 @@
-from server import get_club_list, get_club_by_email, get_club_by_name, get_competition_by_name, deducts_club_points
+from server import get_club_list, get_club_by_email, get_club_by_name, get_competition_by_name, deducts_club_points, \
+    places_required_absolute_value, places_required_is_digit
 
 
 # ERROR 1
@@ -34,47 +35,69 @@ from server import get_club_list, get_club_by_email, get_club_by_name, get_compe
 #     assert get_club_by_email(get_club_list(email)) == expected_value
 
 
-def test_should_return_a_club_with_valid_name():
-    name = 'Iron Temple'
-    club = get_club_by_name(name)
-    expected_value = {
-        "name": "Iron Temple",
-        "email": "admin@irontemple.com",
-        "points": "4"
-    }
-    assert club == expected_value
+# def test_should_return_a_club_with_valid_name():
+#     name = 'Iron Temple'
+#     club = get_club_by_name(name)
+#     expected_value = {
+#         "name": "Iron Temple",
+#         "email": "admin@irontemple.com",
+#         "points": "4"
+#     }
+#     assert club == expected_value
+#
+#
+# def test_should_return_none_with_invalid_name():
+#     name = 'test name'
+#     club = get_club_by_name(name)
+#     expected_value = None
+#     assert club == expected_value
+#
+#
+# def test_should_return_a_competition_with_valid_name():
+#     name = 'Spring Festival'
+#     competition = get_competition_by_name(name)
+#     print(f"competition = {competition}")
+#     expected_value = {
+#             "name": "Spring Festival",
+#             "date": "2020-03-27 10:00:00",
+#             "numberOfPlaces": 20
+#         }
+#     assert competition == expected_value
+#
+#
+# def test_get_competition_by_name_should_return_none_with_invalid_name():
+#     name = 'test name'
+#     competition = get_competition_by_name(name)
+#
+#     expected_value = None
+#     assert competition == expected_value
+#
+#
+# def test_should_deduct_points_club():
+#     club_points = "12"
+#     places = 5
+#     expected_value = 7
+#     assert deducts_club_points(club_points, places) == expected_value
+
+def test_negative_places_required_should_return_absolute_value():
+    places_required = -5
+    expected_value = 5
+    assert places_required_absolute_value(places_required) == expected_value
 
 
-def test_should_return_none_with_invalid_name():
-    name = 'test name'
-    club = get_club_by_name(name)
-    expected_value = None
-    assert club == expected_value
+def test_positive_places_required_return_positive_value():
+    places_required = 5
+    expected_value = 5
+    assert places_required_absolute_value(places_required) == expected_value
 
 
-def test_should_return_a_competition_with_valid_name():
-    name = 'Spring Festival'
-    competition = get_competition_by_name(name)
-    print(f"competition = {competition}")
-    expected_value = {
-            "name": "Spring Festival",
-            "date": "2020-03-27 10:00:00",
-            "numberOfPlaces": 20
-        }
-    assert competition == expected_value
+def test_places_required_should_return_false_if_not_digit():
+    places_required = "abc"
+    expected_value = False
+    assert places_required_is_digit(places_required) == expected_value
 
 
-def test_get_competition_by_name_should_return_none_with_invalid_name():
-    name = 'test name'
-    competition = get_competition_by_name(name)
-
-    expected_value = None
-    assert competition == expected_value
-
-
-def test_should_deduct_points_club():
-    club_points = "12"
-    places = 5
-    expected_value = 7
-    assert deducts_club_points(club_points, places) == expected_value
-
+def test_places_required_should_return_true_if_is_digit():
+    places_required = "5"
+    expected_value = True
+    assert places_required_is_digit(places_required) == expected_value

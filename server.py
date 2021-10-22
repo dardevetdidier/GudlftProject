@@ -28,7 +28,6 @@ def get_club_by_email(club_list):
 
 def get_club_by_name(name):
     club_list = [c for c in clubs if c['name'] == name]
-    print(club_list)
     if club_list:
         return club_list[0]
     else:
@@ -48,6 +47,20 @@ def deducts_club_points(club_points, places):
     return club_points
 
 
+def places_required_absolute_value(places):
+    if places < 0:
+        return abs(places)
+    else:
+        return places
+
+
+def places_required_is_digit(places):
+    if not places.lstrip("-").isdigit():
+        return False
+    else:
+        return True
+
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
@@ -62,10 +75,10 @@ def index():
 
 @app.route('/showSummary', methods=['POST'])
 def show_summary():
-    club_list = [club for club in clubs if club['email'] == request.form['email']]
+    club_list = get_club_list(request.form['email'])
     print(club_list)
     if club_list:
-        club = club_list[0]
+        club = get_club_by_email(club_list)
         return render_template('welcome.html', club=club, competitions=competitions)
     else:
         flash("Sorry, that email was not found.")
@@ -74,8 +87,8 @@ def show_summary():
 
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
-    found_club = [c for c in clubs if c['name'] == club][0]
-    found_competition = [c for c in competitions if c['name'] == competition][0]
+    found_club = get_club_by_name(club)
+    found_competition = get_competition_by_name(competition)
     if found_club and found_competition:
         return render_template('booking.html', club=found_club, competition=found_competition)
     else:
@@ -85,15 +98,31 @@ def book(competition, club):
 
 @app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
-    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
+    competition = get_competition_by_name(request.form['competition'])
+    club = get_club_by_name(request.form['club'])
+
+    while not places_required_is_digit(request.form['places']):
+        flash("You must enter a number")
+        return render_template('booking.html', club=club, competition=competition)
+
     places_required = int(request.form['places'])
+
+    places_required = places_required_absolute_value(places_required)
+
+    if int(competition['numberOfPlaces']) - places_required < 0:
+        flash("You cannot book more than available places")
+        return render_template('booking.html', club=club, competition=competition)
 
     if places_required > int(club['points']):
         flash(f"You cannot book more than {club['points']} points.")
         return render_template('booking.html', club=club, competition=competition)
 
-    club['points'] = int(club['points']) - places_required
+    if places_required > 12:
+        flash(f"Impossible to book more than 12 places.")
+        return render_template('booking.html', club=club, competition=competition)
+
+    club['points'] = deducts_club_points(int(club['points']), places_required)
+
     competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
