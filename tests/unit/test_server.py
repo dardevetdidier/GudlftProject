@@ -53,16 +53,12 @@ from server import get_club_list, get_club_by_email, get_club_by_name, get_compe
 #     assert club == expected_value
 #
 #
-# def test_should_return_a_competition_with_valid_name():
+# def test_should_return_competition_name_with_valid_name():
 #     name = 'Spring Festival'
 #     competition = get_competition_by_name(name)
 #     print(f"competition = {competition}")
-#     expected_value = {
-#             "name": "Spring Festival",
-#             "date": "2020-03-27 10:00:00",
-#             "numberOfPlaces": 20
-#         }
-#     assert competition == expected_value
+#     expected_value = "Spring Festival"
+#     assert competition['name'] == expected_value
 #
 #
 # def test_get_competition_by_name_should_return_none_with_invalid_name():
@@ -79,25 +75,26 @@ from server import get_club_list, get_club_by_email, get_club_by_name, get_compe
 #     expected_value = 7
 #     assert deducts_club_points(club_points, places) == expected_value
 
-def test_negative_places_required_should_return_absolute_value():
-    places_required = -5
-    expected_value = 5
-    assert places_required_absolute_value(places_required) == expected_value
+# def test_negative_places_required_should_return_absolute_value():
+#     places_required = -5
+#     expected_value = 5
+#     assert places_required_absolute_value(places_required) == expected_value
+#
+#
+# def test_positive_places_required_return_positive_value():
+#     places_required = 5
+#     expected_value = 5
+#     assert places_required_absolute_value(places_required) == expected_value
+#
+#
+# def test_places_required_should_return_false_if_not_digit():
+#     places_required = "abc"
+#     expected_value = False
+#     assert places_required_is_digit(places_required) == expected_value
+#
+#
+# def test_places_required_should_return_true_if_is_digit():
+#     places_required = "5"
+#     expected_value = True
+#     assert places_required_is_digit(places_required) == expected_value
 
-
-def test_positive_places_required_return_positive_value():
-    places_required = 5
-    expected_value = 5
-    assert places_required_absolute_value(places_required) == expected_value
-
-
-def test_places_required_should_return_false_if_not_digit():
-    places_required = "abc"
-    expected_value = False
-    assert places_required_is_digit(places_required) == expected_value
-
-
-def test_places_required_should_return_true_if_is_digit():
-    places_required = "5"
-    expected_value = True
-    assert places_required_is_digit(places_required) == expected_value

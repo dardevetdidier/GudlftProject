@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 
@@ -89,11 +91,14 @@ def show_summary():
 def book(competition, club):
     found_club = get_club_by_name(club)
     found_competition = get_competition_by_name(competition)
-    if found_club and found_competition:
+
+    competition_date = datetime.strptime(found_competition['date'], '%Y-%m-%d %H:%M:%S')
+
+    if found_club and found_competition and (competition_date > datetime.now()):
         return render_template('booking.html', club=found_club, competition=found_competition)
-    else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+    elif found_club and found_competition and (competition_date < datetime.now()):
+        flash("Booking impossible. Competition is over.")
+        return render_template('welcome.html', club=found_club, competitions=competitions)
 
 
 @app.route('/purchasePlaces', methods=['POST'])
