@@ -63,6 +63,19 @@ def places_required_is_digit(places):
         return True
 
 
+def format_competition_date(comp_date):
+    competition_date = datetime.strptime(comp_date, '%Y-%m-%d %H:%M:%S')
+    return competition_date
+
+
+def competition_is_over(competition):
+    competition_date = format_competition_date(competition["date"])
+    if competition_date < datetime.now():
+        return True
+    else:
+        return False
+
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
@@ -92,11 +105,12 @@ def book(competition, club):
     found_club = get_club_by_name(club)
     found_competition = get_competition_by_name(competition)
 
-    competition_date = datetime.strptime(found_competition['date'], '%Y-%m-%d %H:%M:%S')
+    competition_date = format_competition_date(found_competition['date'])
+    print(type(competition_date))
 
-    if found_club and found_competition and (competition_date > datetime.now()):
+    if found_club and found_competition and not competition_is_over(found_competition):
         return render_template('booking.html', club=found_club, competition=found_competition)
-    elif found_club and found_competition and (competition_date < datetime.now()):
+    elif found_club and found_competition and competition_is_over(found_competition):
         flash("Booking impossible. Competition is over.")
         return render_template('welcome.html', club=found_club, competitions=competitions)
 
@@ -111,7 +125,6 @@ def purchasePlaces():
         return render_template('booking.html', club=club, competition=competition)
 
     places_required = int(request.form['places'])
-
     places_required = places_required_absolute_value(places_required)
 
     if int(competition['numberOfPlaces']) - places_required < 0:

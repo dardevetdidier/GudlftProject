@@ -1,5 +1,7 @@
+import datetime
+
 from server import get_club_list, get_club_by_email, get_club_by_name, get_competition_by_name, deducts_club_points, \
-    places_required_absolute_value, places_required_is_digit
+    places_required_absolute_value, places_required_is_digit, format_competition_date, competition_is_over
 
 
 # ERROR 1
@@ -99,9 +101,26 @@ from server import get_club_list, get_club_by_email, get_club_by_name, get_compe
 #     assert places_required_is_digit(places_required) == expected_value
 
 
-def test_if_competition_has_date():
-    pass
+def test_return_date_with_datetime_format():
+    comp_date = "2020-03-27 10:00:00"
+    competition_date = format_competition_date(comp_date)
+    assert isinstance(competition_date, datetime.datetime)
 
 
-def test_if_competition_is_over():
-    pass
+def test_return_true_if_competition_is_over():
+    competition = {
+            "name": "Spring Festival",
+            "date": "2020-03-27 10:00:00",
+            "numberOfPlaces": "25"
+    }
+
+    assert competition_is_over(competition) is True
+
+
+def test_return_false_if_competition_is_not_over():
+    competition = {
+        "name": "Spring Festival",
+        "date": "2022-08-12 12:30:00",
+        "numberOfPlaces": "25"
+    }
+    assert competition_is_over(competition) is False
