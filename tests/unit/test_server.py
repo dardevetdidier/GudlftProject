@@ -98,3 +98,10 @@ from server import get_club_list, get_club_by_email, get_club_by_name, get_compe
 #     expected_value = True
 #     assert places_required_is_digit(places_required) == expected_value
 
+
+def test_if_competition_has_date():
+    pass
+
+
+def test_if_competition_is_over():
+    pass
