@@ -76,6 +76,13 @@ def competition_is_over(competition):
         return False
 
 
+def competition_is_full(competition):
+    if competition["numberOfPlaces"] == "0":
+        return True
+    else:
+        return False
+
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
@@ -105,8 +112,12 @@ def book(competition, club):
     found_club = get_club_by_name(club)
     found_competition = get_competition_by_name(competition)
 
-    competition_date = format_competition_date(found_competition['date'])
-    print(type(competition_date))
+    format_competition_date(found_competition['date'])
+
+    full_competition = competition_is_full(found_competition)
+
+    if found_club and found_competition and full_competition:
+        return render_template('welcome.html', club=found_club, competitions=competitions)
 
     if found_club and found_competition and not competition_is_over(found_competition):
         return render_template('booking.html', club=found_club, competition=found_competition)
@@ -127,16 +138,9 @@ def purchasePlaces():
     places_required = int(request.form['places'])
     places_required = places_required_absolute_value(places_required)
 
-    if int(competition['numberOfPlaces']) - places_required < 0:
-        flash("You cannot book more than available places")
-        return render_template('booking.html', club=club, competition=competition)
-
-    if places_required > int(club['points']):
-        flash(f"You cannot book more than {club['points']} points.")
-        return render_template('booking.html', club=club, competition=competition)
-
-    if places_required > 12:
-        flash(f"Impossible to book more than 12 places.")
+    if places_required > 12 or places_required > int(club['points']) or\
+            places_required > int(competition['numberOfPlaces']):
+        flash("You exceed the number of allowed booking places. Try again.")
         return render_template('booking.html', club=club, competition=competition)
 
     club['points'] = deducts_club_points(int(club['points']), places_required)

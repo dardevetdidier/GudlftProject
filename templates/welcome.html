@@ -16,6 +16,7 @@
        </ul>
     {% endif%}
     Points available: {{club['points']}}
+    <p>Max booking places per club: 12</p>
     <h3>Competitions:</h3>
     <ul>
         {% for comp in competitions%}
@@ -25,8 +26,13 @@
             Number of Places: {{ comp['numberOfPlaces'] }}
 
             {% if comp['numberOfPlaces']|int > 0 %}
-            <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+            {% else %}
+                -- Competition is full.
             {%endif%}
+        {% if competition_is_full == false %}
+                Competition is full.
+        {% endif %}
         </li>
         <hr />
         {% endfor %}
