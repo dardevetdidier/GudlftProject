@@ -108,3 +108,17 @@ def get_response(client, places, competition, club):
 #     assert response.status_code == 200
 #     assert expected_message in response.data
 
+
+#  FEATURE 7 -->
+
+def test_pointsboard_endpoint_exists(client):
+    response = client.get("/pointsBoard")
+    assert response.status_code == 200
+
+
+def test_should_diplay_points_board(client, club):
+    response = client.get('/pointsBoard')
+    expected_display = f"<td>{club}</td>"
+
+    assert response.status_code == 200
+    assert expected_display in response.data.decode()
