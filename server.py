@@ -138,7 +138,7 @@ def purchasePlaces():
     places_required = int(request.form['places'])
     places_required = places_required_absolute_value(places_required)
 
-    if places_required > 12 or places_required > int(club['points']) or\
+    if places_required > 12 or places_required > int(club['points']) or \
             places_required > int(competition['numberOfPlaces']):
         flash("You exceed the number of allowed booking places. Try again.")
         return render_template('booking.html', club=club, competition=competition)
@@ -159,7 +159,6 @@ def display_points_board():
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
-
 
 
 if __name__ == '__main__':
