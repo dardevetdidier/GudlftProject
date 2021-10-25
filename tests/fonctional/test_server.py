@@ -1,5 +1,5 @@
 import pytest
-from server import app, load_clubs, load_competitions
+from server import app, POINTS_PER_PLACE
 
 
 @pytest.fixture
@@ -107,10 +107,10 @@ def test_purchase_places_cannot_use_more_than_their_allowed_points(client, compe
 
 def test_purchase_places_reddeem_points_deducted_from_points_clubs(client, competition, club):
     club_points = club['points']
-    places = "5"
-
+    places = "2"
+    points_by_place = POINTS_PER_PLACE
     response = get_response(client, places, competition["name"], club["name"])
-    available_points_str = f"Points available: {int(club_points) - int(places)}"
+    available_points_str = f"Points available: {int(club_points) - (points_by_place * int(places))}"
     expected_available_points = bytes(available_points_str, 'utf-8')
     assert response.status_code == 200
     assert expected_available_points in response.data

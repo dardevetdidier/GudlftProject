@@ -5,29 +5,44 @@ from server import get_club_list, get_club_by_email, get_club_by_name, get_compe
     competition_is_full
 
 
-def test_should_return_a_list_of_one_club_with_valid_email():
+def test_get_club_list_should_return_a_list_of_one_club_with_valid_email():
+    """
+        Checks if get_club_list function does not return an empty list when a valid email is passed as parameter.
+    """
     email = 'john@simplylift.co'
     assert get_club_list(email) != []
 
 
-def test_should_return_an_empty_list_of_club_with_invalid_email():
+def test_get_club_list_should_return_an_empty_list_of_club_with_invalid_email():
+    """
+        Checks if get_club_list function returns an empty list when an invalid email is passed as parameter.
+    """
     email = 'test@test.com'
     expected_value = []
     assert get_club_list(email) == expected_value
 
 
 def test_should_return_a_club_with_not_empty_list_of_club():
+    """
+    Checks if the club email returned by get_club_by_email function is the correct email
+    """
     email = 'john@simplylift.co'
     assert get_club_by_email(get_club_list(email))["email"] == email
 
 
 def test_should_return_none_if_list_of_club_is_empty():
-    email = []
+    """
+    Checks if get_club_by_email function return none if list of clubs is empty.
+    """
+    email = ""
     expected_value = None
     assert get_club_by_email(get_club_list(email)) == expected_value
 
 
 def test_should_return_a_club_with_valid_name():
+    """checks if get_club_by_name function returns the right club by checking its email which must
+       correspond to the club whose name was entered as a parameter to the function.
+     """
     name = 'Iron Temple'
     club = get_club_by_name(name)
     expected_value = {
@@ -39,6 +54,9 @@ def test_should_return_a_club_with_valid_name():
 
 
 def test_should_return_none_with_invalid_name():
+    """Checks if get_club_by_name function returns None if the club name entered as parameter doesn't match with
+       any names of clubs.
+   """
     name = 'test name'
     club = get_club_by_name(name)
     expected_value = None
@@ -46,6 +64,8 @@ def test_should_return_none_with_invalid_name():
 
 
 def test_should_return_competition_name_with_valid_name():
+    """Checks if get_competition_by_name function returns the correct competition
+       by checking if names are corresponding."""
     name = 'Spring Festival'
     competition = get_competition_by_name(name)
     print(f"competition = {competition}")
@@ -54,6 +74,9 @@ def test_should_return_competition_name_with_valid_name():
 
 
 def test_get_competition_by_name_should_return_none_with_invalid_name():
+    """Checks if get_competition_by_name function returns None if
+       name entered as parameter does not match any of the names in the competition list.
+   """
     name = 'test name'
     competition = get_competition_by_name(name)
     expected_value = None
@@ -61,9 +84,11 @@ def test_get_competition_by_name_should_return_none_with_invalid_name():
 
 
 def test_should_deduct_points_club():
+    """Checks if deducts_club_points function deduts the right numbers of points to total points of the club.
+    """
     club_points = "12"
-    places = 5
-    expected_value = 7
+    places = 3
+    expected_value = 3
     assert deducts_club_points(club_points, places) == expected_value
 
 

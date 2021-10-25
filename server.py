@@ -3,6 +3,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, flash, url_for
 
+POINTS_PER_PLACE = 3
 
 def load_clubs():
     with open('clubs.json') as c:
@@ -44,8 +45,15 @@ def get_competition_by_name(name):
         return None
 
 
-def deducts_club_points(club_points, places):
-    club_points = int(club_points) - places
+def deducts_club_points(club_points, places, n=POINTS_PER_PLACE):
+    """
+    Deducts the number of booking places multiplyed by n
+    :param club_points: int: Total of the points of the club
+    :param places: int: The number of places booking by the club
+    :param n: int: Points deducted per one booking place
+    :return: int: TOtal points of the club after deduct.
+    """
+    club_points = int(club_points) - (n * places)
     return club_points
 
 
@@ -136,9 +144,10 @@ def purchasePlaces():
         return render_template('booking.html', club=club, competition=competition)
 
     places_required = int(request.form['places'])
+    # Places required should be positive number
     places_required = places_required_absolute_value(places_required)
 
-    if places_required > 12 or places_required > int(club['points']) or \
+    if places_required > 12 or places_required * POINTS_PER_PLACE > int(club['points']) or \
             places_required > int(competition['numberOfPlaces']):
         flash("You exceed the number of allowed booking places. Try again.")
         return render_template('booking.html', club=club, competition=competition)
