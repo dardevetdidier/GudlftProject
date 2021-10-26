@@ -1,4 +1,6 @@
 import pytest
+from flask import request, url_for
+
 from server import app, POINTS_PER_PLACE
 
 
@@ -171,3 +173,20 @@ def test_book_should_display_if_competition_is_full(client, competition_full, cl
     expected_message = b"Competition is full."
 
     assert expected_message in response.data
+
+
+# BOOK MUST BE DIGIT
+
+def test_should_return_message_if_book_post_is_not_digit(client, competition, club):
+    places = "ab"
+    response = get_response(client, places, competition["name"], club["name"])
+    expected_message = b"You must enter a number"
+    assert expected_message in response.data
+
+
+# LOGOUT
+
+def test_logout_redirection(client):
+    response = client.get('/logout')
+    assert response.status_code == 302
+    assert response.location == 'http://localhost/'
