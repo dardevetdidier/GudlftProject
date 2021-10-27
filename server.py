@@ -5,24 +5,46 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 
 POINTS_PER_PLACE = 3
 
+
 def load_clubs():
+    """
+    Function used for testing app. Get all clubs contained in clubs.json file and return a list of clubs.
+    :return: list: A list of clubs
+    """
     with open('clubs.json') as c:
         list_of_clubs = json.load(c)['clubs']
         return list_of_clubs
 
 
 def load_competitions():
+    """
+    Function used for testing app. Get all competitions contained in competitions.json file and return a list of
+    competitions.
+    :return: list: A list of competitions
+    """
     with open('competitions.json') as comps:
         list_of_competitions = json.load(comps)['competitions']
         return list_of_competitions
 
 
 def get_club_list(email):
+    """
+    Get a list of one club whose email matches the one entered by the user.
+    If the email does not match, return an empty list.
+    :param email: str: An email of a club
+    :return: list: A list of one email
+    """
     club_list = [club for club in clubs if club['email'] == email]
     return club_list
 
 
 def get_club_by_email(club_list):
+    """
+    Function which get a list of one club as parameter and returns this club as dictionary.
+    If club_list is empty, return None
+    :param club_list: list: A list of club
+    :return: dict: A club
+    """
     if club_list:
         return club_list[0]
     else:
@@ -30,6 +52,11 @@ def get_club_by_email(club_list):
 
 
 def get_club_by_name(name):
+    """
+    Returns a club if its name matches with the name of a club. Otherwise, returns None
+    :param name: str: The name of a club
+    :return: dict: A club
+    """
     club_list = [c for c in clubs if c['name'] == name]
     if club_list:
         return club_list[0]
@@ -38,6 +65,11 @@ def get_club_by_name(name):
 
 
 def get_competition_by_name(name):
+    """
+    Returns a competition if its name matches with the name of a competition. Otherwise returns None.
+    :param name: str: The name of a competition
+    :return: dict: A competition.
+    """
     competition = [c for c in competitions if c['name'] == name]
     if competition:
         return competition[0]
@@ -58,6 +90,13 @@ def deducts_club_points(club_points, places, n=POINTS_PER_PLACE):
 
 
 def places_required_absolute_value(places):
+    """
+    Checks if the number of book places entered by the user is a positive number.
+    If it's a valid number returns this number.
+    Otherwise returns the absolute value of this number
+    :param places: int: The number of places
+    :return: int: The absolute value of the number of places
+    """
     if places < 0:
         return abs(places)
     else:
@@ -65,6 +104,11 @@ def places_required_absolute_value(places):
 
 
 def places_required_is_digit(places):
+    """
+    Checks if the number of book places entered by the user is a number.
+    :param places: str: The input of the user in number of places form.
+    :return: Bool: True if 'places' is a number
+    """
     if not places.lstrip("-").isdigit():
         return False
     else:
@@ -72,11 +116,21 @@ def places_required_is_digit(places):
 
 
 def format_competition_date(comp_date):
+    """
+    Transfom the date from string format to datetime format.
+    :param comp_date: str: Competition date
+    :return: datetime object : The date of the competition
+    """
     competition_date = datetime.strptime(comp_date, '%Y-%m-%d %H:%M:%S')
     return competition_date
 
 
 def competition_is_over(competition):
+    """
+    Checks if the date of the competition is earlier than the time of the execution of the function.
+    :param competition: dict: A competition
+    :return: Bool: True if the competition is over.
+    """
     competition_date = format_competition_date(competition["date"])
     if competition_date < datetime.now():
         return True
@@ -85,6 +139,11 @@ def competition_is_over(competition):
 
 
 def competition_is_full(competition):
+    """
+    Checks if competiton is full.
+    :param competition: dict: A competition
+    :return: Bool: True if the competition is full.
+    """
     if competition["numberOfPlaces"] == "0":
         return True
     else:
