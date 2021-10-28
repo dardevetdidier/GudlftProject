@@ -99,30 +99,40 @@ def test_should_deduct_points_club():
 
 
 def test_negative_places_required_should_return_absolute_value():
+    """
+    Checks if 'places_required_absolute_value' function returns absolute value of the number of places required is a
+    negative number.
+    """
     places_required = -5
     expected_value = 5
     assert places_required_absolute_value(places_required) == expected_value
 
 
 def test_positive_places_required_return_positive_value():
+    """
+    Checks if 'places_required_absolute_value' function returns the number entered by the user if its a positive number.
+    """
     places_required = 5
     expected_value = 5
     assert places_required_absolute_value(places_required) == expected_value
 
 
-def test_places_required_should_return_false_if_not_digit():
+def test_places_required_is_digit_should_return_false_if_not_digit():
+    """If the user enters a non digit value, expected 'places_required_is_digit' returns False"""
     places_required = "abc"
     expected_value = False
     assert places_required_is_digit(places_required) == expected_value
 
 
 def test_places_required_should_return_true_if_is_digit():
+    """If the user enters a digit value, expected 'places_required_is_digit' returns True"""
     places_required = "5"
     expected_value = True
     assert places_required_is_digit(places_required) == expected_value
 
 
 def test_return_date_with_datetime_format():
+    """Checks if the date of the competition is converted in datetime type."""
     comp_date = "2020-03-27 10:00:00"
     competition_date = format_competition_date(comp_date)
     assert isinstance(competition_date, datetime.datetime)

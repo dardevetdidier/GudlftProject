@@ -178,7 +178,6 @@ def show_summary():
 def book(competition, club):
     found_club = get_club_by_name(club)
     found_competition = get_competition_by_name(competition)
-
     format_competition_date(found_competition['date'])
 
     full_competition = competition_is_full(found_competition)
@@ -220,7 +219,7 @@ def purchasePlaces():
 
 @app.route('/pointsBoard')
 def display_points_board():
-    all_clubs = load_clubs()
+    all_clubs = clubs
     return render_template('points_board.html', clubs=all_clubs)
 
 
