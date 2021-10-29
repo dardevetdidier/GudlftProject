@@ -219,14 +219,13 @@ def purchasePlaces():
 
 @app.route('/pointsBoard')
 def display_points_board():
-    all_clubs = clubs
-    return render_template('points_board.html', clubs=all_clubs)
+    return render_template('points_board.html', clubs=clubs)
 
 
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
+#
+# if __name__ == '__main__':
+#     app.run(debug=True)
