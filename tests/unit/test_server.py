@@ -139,6 +139,7 @@ def test_return_date_with_datetime_format():
 
 
 def test_return_true_if_competition_is_over():
+    """Checks if competition_is_over function returns True if date is past"""
     competition = {
             "name": "Spring Festival",
             "date": "2020-03-27 10:00:00",
@@ -148,6 +149,7 @@ def test_return_true_if_competition_is_over():
 
 
 def test_return_false_if_competition_is_not_over():
+    """Checks if competition_is_over function returns False if date is not past"""
     competition = {
         "name": "Spring Festival",
         "date": "2022-08-12 12:30:00",
@@ -157,6 +159,7 @@ def test_return_false_if_competition_is_not_over():
 
 
 def test_should_return_true_if_competition_is_full():
+    """Checks if competition_is_full function returns True if number of places is equal to zero"""
     competition = {
         "name": "Test Competition",
         "date": "2022-08-12 12:30:00",
@@ -166,6 +169,7 @@ def test_should_return_true_if_competition_is_full():
 
 
 def test_should_return_false_if_competition_is_not_full():
+    """Checks if competition_is_full function returns False if number of places is not equal to zero"""
     competition = {
         "name": "Test Competition",
         "date": "2022-08-12 12:30:00",

@@ -213,7 +213,7 @@ def purchasePlaces():
     club['points'] = deducts_club_points(int(club['points']), places_required)
 
     competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-    flash('Great-booking complete!')
+    flash(f'Great-booking complete! {places_required} places booked.')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
@@ -225,7 +225,3 @@ def display_points_board():
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
-
-#
-# if __name__ == '__main__':
-#     app.run(debug=True)
